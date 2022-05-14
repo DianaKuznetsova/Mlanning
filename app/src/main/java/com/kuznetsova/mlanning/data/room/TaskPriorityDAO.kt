@@ -7,5 +7,5 @@ import androidx.room.Query
 interface TaskPriorityDAO {
 
     @Query("SELECT * FROM TaskPriority")
-    suspend fun getAllPriorities() :List<TaskPriorityEntity>
+    suspend fun getAllPriorities(): List<TaskPriorityEntity>
 }

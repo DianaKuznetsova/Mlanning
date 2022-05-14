@@ -1,9 +1,9 @@
 package com.kuznetsova.mlanning.data.room
 
 import com.kuznetsova.mlanning.data.TasksDataSource
+import com.kuznetsova.mlanning.domain.TaskPriority
 import com.kuznetsova.mlanning.domain.task.Task
 import com.kuznetsova.mlanning.domain.taskitem.TaskItem
-import com.kuznetsova.mlanning.domain.TaskPriority
 import java.util.*
 
 class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSource {
@@ -103,7 +103,7 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         )
     }
 
-    private suspend fun getPriorityId(taskPriority: TaskPriority): Int{
+    private suspend fun getPriorityId(taskPriority: TaskPriority): Int {
 
         val priority =
             appDatabase.taskPriorityDAO().getAllPriorities().first { taskPriorityEntity ->
@@ -130,24 +130,26 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         appDatabase.taskItemDAO().deleteTaskItem(taskItemId)
     }
 
-    private suspend fun insertTaskItem(taskItem: TaskItem, taskId: Int){
+    private suspend fun insertTaskItem(taskItem: TaskItem, taskId: Int) {
 
         val day: Date = taskItem.day
 
         val dayEntities: List<DayEntity> = appDatabase.dayDAO().getAllDaysByTaskId(taskId)
 
-        val dayEntity: DayEntity? = dayEntities.firstOrNull{
+        val dayEntity: DayEntity? = dayEntities.firstOrNull {
             it.date == day.time
         }
 
 
-        val dayId = if(dayEntity == null){
-            appDatabase.dayDAO().insertDay(DayEntity(
-                id = 0,
-                date = day.time,
-                taskId = taskId
-            ))
-        }else {
+        val dayId = if (dayEntity == null) {
+            appDatabase.dayDAO().insertDay(
+                DayEntity(
+                    id = 0,
+                    date = day.time,
+                    taskId = taskId
+                )
+            )
+        } else {
             dayEntity.id
         }
 

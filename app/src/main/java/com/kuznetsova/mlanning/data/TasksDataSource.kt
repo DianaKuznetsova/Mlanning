@@ -1,8 +1,8 @@
 package com.kuznetsova.mlanning.data
 
+import com.kuznetsova.mlanning.domain.TaskPriority
 import com.kuznetsova.mlanning.domain.task.Task
 import com.kuznetsova.mlanning.domain.taskitem.TaskItem
-import com.kuznetsova.mlanning.domain.TaskPriority
 
 interface TasksDataSource {
 

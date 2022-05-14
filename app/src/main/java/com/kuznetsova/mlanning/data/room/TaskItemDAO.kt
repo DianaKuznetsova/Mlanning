@@ -15,5 +15,5 @@ interface TaskItemDAO {
     suspend fun insertTaskItem(taskItem: TaskItemEntity)
 
     @Delete(entity = TaskItemEntity::class)
-    suspend fun deleteTaskItem(id:Int)
+    suspend fun deleteTaskItem(id: Int)
 }

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
         childColumns = ["dayId"],
         onDelete = ForeignKey.CASCADE
     )],
-        tableName = "TaskItem"
+    tableName = "TaskItem"
 )
 data class TaskItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,

@@ -1,9 +1,9 @@
 package com.kuznetsova.mlanning.data
 
-import com.kuznetsova.mlanning.domain.task.Task
-import com.kuznetsova.mlanning.domain.taskitem.TaskItem
 import com.kuznetsova.mlanning.domain.TaskPriority
 import com.kuznetsova.mlanning.domain.TasksRepository
+import com.kuznetsova.mlanning.domain.task.Task
+import com.kuznetsova.mlanning.domain.taskitem.TaskItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
@@ -11,12 +11,12 @@ import kotlin.coroutines.CoroutineContext
 class TasksRepositoryImplementation(
     private val localDataSource: TasksDataSource,
     private val coroutineContext: CoroutineContext = Dispatchers.IO
-): TasksRepository {
-    override suspend fun getAll(): List<Task> = withContext(coroutineContext){
+) : TasksRepository {
+    override suspend fun getAll(): List<Task> = withContext(coroutineContext) {
         return@withContext localDataSource.getAllTask()
     }
 
-    override suspend fun getTaskById(id: Int): Task = withContext(coroutineContext){
+    override suspend fun getTaskById(id: Int): Task = withContext(coroutineContext) {
         return@withContext localDataSource.getTaskById(id)
     }
 
@@ -38,8 +38,8 @@ class TasksRepositoryImplementation(
         )
     }
 
-    override suspend fun deleteTask(id: Int) = withContext(coroutineContext){
-            localDataSource.deleteTask(id)
+    override suspend fun deleteTask(id: Int) = withContext(coroutineContext) {
+        localDataSource.deleteTask(id)
     }
 
     override suspend fun updateTaskItem(taskItem: TaskItem, taskId: Int) {
@@ -54,7 +54,7 @@ class TasksRepositoryImplementation(
         localDataSource.deleteTaskItem(id)
     }
 
-    override suspend fun getAllTaskItemByDayId(dayId: Int) = withContext(coroutineContext){
+    override suspend fun getAllTaskItemByDayId(dayId: Int) = withContext(coroutineContext) {
         TODO("Not yet implemented")
     }
 }

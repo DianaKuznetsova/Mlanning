@@ -9,10 +9,10 @@ interface DayDAO {
     suspend fun getAllDaysByTaskId(taskId: Int): List<DayEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDays(day: List<DayEntity>) : List<Int>
+    suspend fun insertDays(day: List<DayEntity>): List<Int>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDay(day: DayEntity) : Int
+    suspend fun insertDay(day: DayEntity): Int
 
     @Delete(entity = DayEntity::class)
     suspend fun deleteDay(dayId: Int)
