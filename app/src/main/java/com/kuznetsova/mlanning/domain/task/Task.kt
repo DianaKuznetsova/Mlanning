@@ -1,4 +1,7 @@
-package com.kuznetsova.mlanning.domain
+package com.kuznetsova.mlanning.domain.task
+
+import com.kuznetsova.mlanning.domain.TaskPriority
+import com.kuznetsova.mlanning.domain.taskitem.TaskItem
 
 data class Task(
     val id: Int,
@@ -6,8 +9,4 @@ data class Task(
     val description: String?,
     val taskItems: List<TaskItem>,
     val priority: TaskPriority,
-
-
-
-
 )
