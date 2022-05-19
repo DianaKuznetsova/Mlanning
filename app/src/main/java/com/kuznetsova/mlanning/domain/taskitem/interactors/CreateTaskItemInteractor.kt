@@ -1,12 +1,12 @@
 package com.kuznetsova.mlanning.domain.taskitem.interactors
 
+import com.kuznetsova.mlanning.domain.Day
 import com.kuznetsova.mlanning.domain.TasksRepository
 import com.kuznetsova.mlanning.domain.taskitem.TaskItem
-import java.util.*
 
 class CreateTaskItemInteractor(private val repository: TasksRepository) {
 
-    suspend fun execute(description: String?, day: Date, taskId: Int) {
+    suspend fun execute(description: String, day: Day, taskId: Long) {
 
         repository.createTaskItem(
             TaskItem(

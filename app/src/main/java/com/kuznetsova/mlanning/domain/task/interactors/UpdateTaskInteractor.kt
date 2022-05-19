@@ -6,7 +6,7 @@ import com.kuznetsova.mlanning.domain.TasksRepository
 class UpdateTaskInteractor(private val repository: TasksRepository) {
 
     suspend fun execute(
-        taskId: Int,
+        taskId: Long,
         name: String,
         description: String?,
         priority: TaskPriority

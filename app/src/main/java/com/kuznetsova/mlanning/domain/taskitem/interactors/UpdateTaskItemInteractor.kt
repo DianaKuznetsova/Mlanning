@@ -5,7 +5,7 @@ import com.kuznetsova.mlanning.domain.taskitem.TaskItem
 
 class UpdateTaskItemInteractor(private val repository: TasksRepository) {
 
-    suspend fun execute(taskItem: TaskItem, taskId: Int) {
+    suspend fun execute(taskItem: TaskItem, taskId: Long) {
         repository.updateTaskItem(taskItem, taskId)
     }
 }

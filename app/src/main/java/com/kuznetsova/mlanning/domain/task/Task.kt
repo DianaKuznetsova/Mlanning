@@ -4,7 +4,7 @@ import com.kuznetsova.mlanning.domain.TaskPriority
 import com.kuznetsova.mlanning.domain.taskitem.TaskItem
 
 data class Task(
-    val id: Int,
+    val id: Long,
     val name: String,
     val description: String?,
     val taskItems: List<TaskItem>,

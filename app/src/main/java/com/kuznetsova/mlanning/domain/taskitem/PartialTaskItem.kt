@@ -1,8 +1,8 @@
 package com.kuznetsova.mlanning.domain.taskitem
 
-import java.util.*
+import com.kuznetsova.mlanning.domain.Day
 
 data class PartialTaskItem(
     val description: String,
-    val day: Date
+    val day: Day
 )

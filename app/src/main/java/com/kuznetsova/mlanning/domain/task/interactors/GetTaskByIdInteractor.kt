@@ -5,7 +5,7 @@ import com.kuznetsova.mlanning.domain.task.Task
 
 class GetTaskByIdInteractor(private val repository: TasksRepository) {
 
-    suspend fun execute(id: Int): Task {
+    suspend fun execute(id: Long): Task {
         return repository.getTaskById(id)
     }
 }
