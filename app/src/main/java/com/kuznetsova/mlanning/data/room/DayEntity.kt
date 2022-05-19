@@ -7,7 +7,9 @@ import androidx.room.PrimaryKey
     tableName = "Day"
 )
 data class DayEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int,
-    val date: Long,
-    val taskId: Int
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    val day: Int,
+    val month: Int,
+    val year: Int,
+    val taskId: Long
 )

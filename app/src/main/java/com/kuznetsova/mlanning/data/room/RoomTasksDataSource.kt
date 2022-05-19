@@ -1,10 +1,11 @@
 package com.kuznetsova.mlanning.data.room
 
 import com.kuznetsova.mlanning.data.TasksDataSource
+import com.kuznetsova.mlanning.domain.Day
 import com.kuznetsova.mlanning.domain.TaskPriority
 import com.kuznetsova.mlanning.domain.task.Task
 import com.kuznetsova.mlanning.domain.taskitem.TaskItem
-import java.util.*
+
 
 class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSource {
     override suspend fun getAllTask(): List<Task> {
@@ -14,7 +15,7 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         }
     }
 
-    override suspend fun getTaskById(id: Int): Task {
+    override suspend fun getTaskById(id: Long): Task {
         val task = appDatabase.taskDAO().getTaskById(id)
         return transformTask(task)
     }
@@ -31,12 +32,12 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
             taskEntity.name,
             taskEntity.description,
             appDatabase.dayDAO().getAllDaysByTaskId(taskEntity.id).flatMap { dayEntity ->
-                appDatabase.taskItemDAO().getAllByDayId(dayEntity.taskId)
+                appDatabase.taskItemDAO().getAllByDayId(dayEntity.id)
                     .map { taskItemEntity ->
                         TaskItem(
                             taskItemEntity.id,
                             taskItemEntity.description,
-                            Date(dayEntity.date),
+                            Day(dayEntity.day, dayEntity.month, dayEntity.year),
                             taskItemEntity.isDone
 
                         )
@@ -49,37 +50,41 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
     override suspend fun insertTask(task: Task) {
         val priority = getPriorityId(task.priority)
 
+        val taskId = appDatabase.taskDAO().insertTask(
+            TaskEntity(
+                id = task.id,
+                name = task.name,
+                description = task.description,
+                priorityId = priority
+            )
+        )
+
         val days = task.taskItems.map { taskItem ->
             taskItem.day
         }.distinct()
 
         val daysEntity: List<DayEntity> = days.map { it ->
             DayEntity(
-                0,
-                it.time,
-                task.id
+                id = 0,
+                day = it.day,
+                month = it.month,
+                year = it.year,
+                taskId = taskId
             )
         }
 
         val daysIds = appDatabase.dayDAO().insertDays(daysEntity)
 
-        appDatabase.taskDAO().insertTask(
-            TaskEntity(
-                task.id,
-                task.name,
-                task.description,
-                priority
-            )
-        )
+
 
         appDatabase.taskItemDAO().insertTaskItems(
 
             task.taskItems.map { taskItem ->
                 TaskItemEntity(
-                    taskItem.id,
-                    daysIds[days.indexOf(taskItem.day)],
-                    taskItem.description,
-                    taskItem.isDone
+                    id = taskItem.id,
+                    dayId = daysIds[days.indexOf(taskItem.day)].toInt(),
+                    description = taskItem.description,
+                    isDone = taskItem.isDone
                 )
             }
 
@@ -87,7 +92,7 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
     }
 
     override suspend fun updateTask(
-        taskId: Int,
+        taskId: Long,
         name: String,
         description: String?,
         priority: TaskPriority
@@ -112,16 +117,16 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         return priority.id
     }
 
-    override suspend fun deleteTask(id: Int) {
+    override suspend fun deleteTask(id: Long) {
         appDatabase.taskDAO().deleteTask(id)
     }
 
-    override suspend fun updateTaskItem(taskItem: TaskItem, taskId: Int) {
+    override suspend fun updateTaskItem(taskItem: TaskItem, taskId: Long) {
 
         insertTaskItem(taskItem, taskId)
     }
 
-    override suspend fun createTaskItem(taskItem: TaskItem, taskId: Int) {
+    override suspend fun createTaskItem(taskItem: TaskItem, taskId: Long) {
 
         insertTaskItem(taskItem, taskId)
     }
@@ -130,14 +135,14 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         appDatabase.taskItemDAO().deleteTaskItem(taskItemId)
     }
 
-    private suspend fun insertTaskItem(taskItem: TaskItem, taskId: Int) {
+    private suspend fun insertTaskItem(taskItem: TaskItem, taskId: Long) {
 
-        val day: Date = taskItem.day
+        val day: Day = taskItem.day
 
         val dayEntities: List<DayEntity> = appDatabase.dayDAO().getAllDaysByTaskId(taskId)
 
         val dayEntity: DayEntity? = dayEntities.firstOrNull {
-            it.date == day.time
+            it.day == day.day && it.month == day.month && it.year == day.year
         }
 
 
@@ -145,7 +150,9 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
             appDatabase.dayDAO().insertDay(
                 DayEntity(
                     id = 0,
-                    date = day.time,
+                    day = day.day,
+                    month = day.month,
+                    year = day.year,
                     taskId = taskId
                 )
             )
@@ -156,7 +163,7 @@ class RoomTasksDataSource(private val appDatabase: AppDatabase) : TasksDataSourc
         appDatabase.taskItemDAO().insertTaskItem(
             TaskItemEntity(
                 id = taskItem.id,
-                dayId = dayId,
+                dayId = dayId.toInt(),
                 description = taskItem.description,
                 isDone = taskItem.isDone
             )

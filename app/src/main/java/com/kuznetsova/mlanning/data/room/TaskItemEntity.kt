@@ -16,6 +16,6 @@ import androidx.room.PrimaryKey
 data class TaskItemEntity(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val dayId: Int,
-    val description: String?,
+    val description: String,
     val isDone: Boolean
 )

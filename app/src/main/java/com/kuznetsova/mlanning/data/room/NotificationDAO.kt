@@ -1,6 +1,9 @@
 package com.kuznetsova.mlanning.data.room
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface NotificationDAO {
@@ -11,6 +14,6 @@ interface NotificationDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNotification(notification: NotificationEntity)
 
-    @Delete(entity = NotificationEntity::class)
+    @Query("DELETE  FROM Notification WHERE id = :notificationId")
     suspend fun deleteNotification(notificationId: Int)
 }

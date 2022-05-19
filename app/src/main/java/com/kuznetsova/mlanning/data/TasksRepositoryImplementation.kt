@@ -16,7 +16,7 @@ class TasksRepositoryImplementation(
         return@withContext localDataSource.getAllTask()
     }
 
-    override suspend fun getTaskById(id: Int): Task = withContext(coroutineContext) {
+    override suspend fun getTaskById(id: Long): Task = withContext(coroutineContext) {
         return@withContext localDataSource.getTaskById(id)
     }
 
@@ -25,7 +25,7 @@ class TasksRepositoryImplementation(
     }
 
     override suspend fun updateTask(
-        taskId: Int,
+        taskId: Long,
         name: String,
         description: String?,
         priority: TaskPriority
@@ -38,17 +38,19 @@ class TasksRepositoryImplementation(
         )
     }
 
-    override suspend fun deleteTask(id: Int) = withContext(coroutineContext) {
+    override suspend fun deleteTask(id: Long) = withContext(coroutineContext) {
         localDataSource.deleteTask(id)
     }
 
-    override suspend fun updateTaskItem(taskItem: TaskItem, taskId: Int) {
-        localDataSource.updateTaskItem(taskItem, taskId)
-    }
+    override suspend fun updateTaskItem(taskItem: TaskItem, taskId: Long) =
+        withContext(coroutineContext) {
+            localDataSource.updateTaskItem(taskItem, taskId)
+        }
 
-    override suspend fun createTaskItem(taskItem: TaskItem, taskId: Int) {
-        localDataSource.createTaskItem(taskItem, taskId)
-    }
+    override suspend fun createTaskItem(taskItem: TaskItem, taskId: Long) =
+        withContext(coroutineContext) {
+            localDataSource.createTaskItem(taskItem, taskId)
+        }
 
     override suspend fun deleteTaskItem(id: Int) = withContext(coroutineContext) {
         localDataSource.deleteTaskItem(id)

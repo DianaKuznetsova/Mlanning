@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Mlanning</string>
+
+    <string name="add_task">Task name</string>
+    <string name="add_description">Description</string>
+    <string name="choose_priority_button">Task priority</string>
+    <string name="choose_days_button">Select day</string>
+
+    <string name="priority_high">High</string>
+    <string name="priority_normal">Normal</string>
+    <string name="priority_low">Low</string>
+    <string name="add_task_item">Add subtask</string>
+    <string name="ok_task_item">Ok</string>
+    <string name="cancel_task_item">Cancel</string>
+    <string name="save_button">Save</string>
 </resources>
